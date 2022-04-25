@@ -8,11 +8,12 @@ import (
 	"time"
 
 	"github.com/prometheus/prometheus/promql"
+	"google.golang.org/grpc"
+
 	"github.com/thanos-io/thanos/pkg/api/query/querypb"
 	"github.com/thanos-io/thanos/pkg/query"
 	"github.com/thanos-io/thanos/pkg/store/labelpb"
 	"github.com/thanos-io/thanos/pkg/store/storepb/prompb"
-	"google.golang.org/grpc"
 )
 
 type GRPCAPI struct {
@@ -73,7 +74,7 @@ func (g *GRPCAPI) Query(request *querypb.QueryRequest, server querypb.Query_Quer
 		request.EnableQueryPushdown,
 		false,
 	)
-	qry, err := qe.NewInstantQuery(queryable, request.Query, ts)
+	qry, err := qe.NewInstantQuery(queryable, nil, request.Query, ts)
 	if err != nil {
 		return err
 	}
@@ -141,7 +142,7 @@ func (g *GRPCAPI) QueryRange(request *querypb.QueryRangeRequest, srv querypb.Que
 	endTime := time.Unix(request.EndTimeSeconds, 0)
 	interval := time.Duration(request.IntervalSeconds) * time.Second
 
-	qry, err := qe.NewRangeQuery(queryable, request.Query, startTime, endTime, interval)
+	qry, err := qe.NewRangeQuery(queryable, nil, request.Query, startTime, endTime, interval)
 	if err != nil {
 		return err
 	}
