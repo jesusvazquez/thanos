@@ -924,12 +924,12 @@ func (b *memBlock) Series(id storage.SeriesRef, lset *labels.Labels, chks *[]chu
 	return nil
 }
 
-func (b *memBlock) Chunk(id chunks.ChunkRef) (chunkenc.Chunk, error) {
-	if uint64(id) >= b.numberOfChunks {
-		return nil, errors.Wrapf(storage.ErrNotFound, "chunk with ID %d does not exist", id)
+func (b *memBlock) Chunk(meta chunks.Meta) (chunkenc.Chunk, error) {
+	if uint64(meta.Ref) >= b.numberOfChunks {
+		return nil, errors.Wrapf(storage.ErrNotFound, "chunk with ID %d does not exist", meta.Ref)
 	}
 
-	return b.chunks[id], nil
+	return b.chunks[meta.Ref], nil
 }
 
 func (b *memBlock) Symbols() index.StringIter {
