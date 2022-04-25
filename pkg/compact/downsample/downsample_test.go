@@ -484,7 +484,7 @@ func TestDownsample(t *testing.T) {
 
 			var got []map[AggrType][]sample
 			for _, c := range chks {
-				chk, err := chunkr.Chunk(c.Ref)
+				chk, err := chunkr.Chunk(c)
 				testutil.Ok(t, err)
 
 				m := map[AggrType][]sample{}
